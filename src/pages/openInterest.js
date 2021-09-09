@@ -2,6 +2,8 @@ import React, {useEffect, useState}  from 'react';
 import axios from "axios";
 import axiosThrottle from 'axios-request-throttle';
 
+import OpenInterestTable from "../components/openInterestTable"
+
 axiosThrottle.use(axios, { requestsPerSecond: 2 });
 
 export default function OpenInterest() {
@@ -75,8 +77,8 @@ export default function OpenInterest() {
             <div className={`${loading ? " " : " hidden "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300"}>
                 <p>loading...</p>
             </div>
-            <div className={`${loading ? " hidden " : "  "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300"}>
-                <p>Open Interest</p>
+            <div className={`${loading ? " hidden " : "  "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300 dark:bg-custom-gray-a shadow-lg rounded-lg"}>
+                <OpenInterestTable dataAll={dataOiALL} dataEx={dataOiEX}/>
             </div>
         </div>
     );

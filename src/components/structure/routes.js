@@ -1,5 +1,5 @@
-import Home from "../pages/home";
-import OpenInterest from "../pages/openInterest";
+import Home from "../../pages/home";
+import OpenInterest from "../../pages/openInterest";
 // import Page2 from "../pages/page2";
 
 export const routes = [
