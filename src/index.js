@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {ThemeProvider} from './components/themeContext';
-import Background from './components/background';
+import {ThemeProvider} from './components/structure/themeContext';
+import Background from './components/structure/background';
 // import Toggle from './components/themeToggle';
 import reportWebVitals from './reportWebVitals';
 
