@@ -1,7 +1,7 @@
 const Background = ({children}) => {
     return (
         // Remove transition-all to disable the background color transition.
-        <body className="bg-white dark:bg-custom-gray-b transition-all">
+        <body className="bg-custom-pink-a dark:bg-custom-gray-b transition-all">
         {children}
         </body>
     )

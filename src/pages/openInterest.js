@@ -1,32 +1,42 @@
-import React, {useEffect, useState}  from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import axiosThrottle from 'axios-request-throttle';
 
 import OpenInterestTable from "../components/openInterestTable"
+import OpenInterestChart from "../components/openInterestChart";
 
-axiosThrottle.use(axios, { requestsPerSecond: 2 });
+axiosThrottle.use(axios, {requestsPerSecond: 2});
 
 export default function OpenInterest() {
     const [dataOiALL, setDataOiALL] = useState([]);
     const [dataOiEX, setDataOiEX] = useState([]);
     const [chartData, setChartData] = useState([]);
-    const [ loading, setloading ] = useState(true);
+    const [loading, setloading] = useState(true);
 
-    function updateData() {
-        const tokens = ["BTC", "ETH", "LINK", "UNI", "DOT", "SNX", "SUSHI", "BNB", "AAVE", "YFI", "MKR", "SOL", "LTC", "DOGE"];
-        // const tokens = ["BTC", "ETH"];
+    const [timeframe, setTimeframe] = useState('0');
+
+    // const tokens = ["BTC", "ETH", "LINK", "UNI", "DOT", "SNX", "SUSHI", "BNB", "AAVE", "YFI", "MKR", "SOL", "LTC", "DOGE"];
+    const tokens = ["BTC", "ETH"];
+
+    function updateData(tokens) {
+
         setDataOiALL([])
         setDataOiEX([])
         setChartData([])
         getDataExchangeOi(tokens)
-        getDataChartOi(tokens)
+        getDataChartOi(tokens, timeframe)
 
     }
 
+    function setTimeframeValue(timeframe) {
+        setTimeframe({timeframe})
+    }
+
     useEffect(() => {
-        updateData()
+        updateData(tokens)
         setloading(false)
     }, [])
+
 
     function getDataExchangeOi(tokens) {
         const prefix = "https://fapi.bybt.com/api/openInterest/pc/info?symbol=";
@@ -45,9 +55,9 @@ export default function OpenInterest() {
             )
     }
 
-    function getDataChartOi(tokens) {
+    function getDataChartOi(tokens, dataTimeframe) {
         const prefix = "https://fapi.bybt.com/api/openInterest/v3/chart?symbol=";
-        Promise.all(tokens.map(u => axios.get(prefix + u + "&timeType=10&exchangeName=&type=0")))
+        Promise.all(tokens.map(u => axios.get(prefix + u + "&timeType=" + dataTimeframe + "&exchangeName=&type=0")))
             .then(responses =>
                 responses.map(response => {
                         const result = Object.keys(response.data.data.dataMap).reduce(function (r, k) {
@@ -74,11 +84,21 @@ export default function OpenInterest() {
 
     return (
         <div className="px-8 mx-auto ">
-            <div className={`${loading ? " " : " hidden "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300"}>
+            <div
+                className={`${loading ? " " : " hidden "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300"}>
                 <p>loading...</p>
             </div>
-            <div className={`${loading ? " hidden " : "  "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300 dark:bg-custom-gray-a shadow-lg rounded-lg"}>
-                <OpenInterestTable dataAll={dataOiALL} />
+            <div
+                className={`${loading ? " hidden " : "  "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300 bg-white dark:bg-custom-gray-a shadow-lg rounded-lg"}>
+                <div className="flex flex-row gap-3 mt-2">
+                    <button className="w-12 py-1 border border-gray-200 rounded-full" onClick={() => setTimeframeValue('0')}>all</button>
+                    <button className="w-12 py-1 border border-gray-200 rounded-full" onClick={() => setTimeframeValue('4')}>12h</button>
+                    <button className="w-12 py-1 border border-gray-200 rounded-full" onClick={() => setTimeframeValue('1')}>4h</button>
+                    <button className="w-12 py-1 border border-gray-200 rounded-full" onClick={() => setTimeframeValue('2')}>1h</button>
+                    <button className="w-12 py-1 border border-gray-200 rounded-full" onClick={() => setTimeframeValue('10')}>15m</button>
+                </div>
+                <OpenInterestChart chartData={chartData}/>
+                <OpenInterestTable dataAll={dataOiALL}/>
             </div>
         </div>
     );
