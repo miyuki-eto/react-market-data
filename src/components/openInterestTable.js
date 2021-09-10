@@ -11,18 +11,18 @@ export default function OpenInterestTable({ dataAll }) {
             <table className="w-full table text-right">
                 <thead>
                 <tr className="">
-                    <th className="px-4">Symbol</th>
-                    <th className="px-4">OI (USD)</th>
-                    <th className="px-4">OI (Token)</th>
-                    <th className="px-4">1hr Change</th>
-                    <th className="px-4">4hr Change</th>
-                    <th className="px-4">24hr Change</th>
+                    <th className="px-4">symbol</th>
+                    <th className="px-4">oi (usd)</th>
+                    <th className="px-4">oi (token)</th>
+                    <th className="px-4">1hr change</th>
+                    <th className="px-4">4hr change</th>
+                    <th className="px-4">24hr change</th>
                 </tr>
                 </thead>
                 <tbody>
                     {dataAll.map((token, index) => (
-                        <tr className="">
-                            <td className="px-4">{token.symbol}</td>
+                        <tr key={token.symbol} className="">
+                            <td className="px-4">{token.symbol.toLowerCase()}</td>
                             <td className="px-4">{formatMoney(token.openInterest)}</td>
                             <td className="px-4">{token.openInterestAmount.toFixed(2)}</td>
                             <td className={`${token.h1OIChangePercent > 0 ? 'text-green-300' : 'text-red-300'}` + " px-4"}>{token.h1OIChangePercent.toFixed(2) + "%"}</td>

@@ -9,7 +9,8 @@ module.exports = {
         lime: colors.lime,
         emerald: colors.emerald,
         'custom-gray-a': '#161b22',
-        'custom-gray-b': '#0d1117'
+        'custom-gray-b': '#0d1117',
+        'custom-pink-a': '#fcefed'
       },
     },
   },

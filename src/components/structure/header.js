@@ -16,19 +16,14 @@ function Header() {
                 <ul className="flex flex-row text-xl text-center w-full">
                     <Link to="/">
                         <li className="rounded-lg px-2 py-2">
-                            Home
+                            home
                         </li>
                     </Link>
                     <Link to="/openinterest">
                         <li className="rounded-lg px-2 py-2">
-                            Open Interest
+                            open interest
                         </li>
                     </Link>
-                    {/*<Link to="/page2">*/}
-                    {/*    <li className="rounded-lg px-2 py-2 transition-color hover:bg-custom-bga ease-in-out duration-700">*/}
-                    {/*        Page2*/}
-                    {/*    </li>*/}
-                    {/*</Link>*/}
                 </ul>
             </div>
             <div className="">
