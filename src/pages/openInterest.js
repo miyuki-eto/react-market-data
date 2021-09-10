@@ -78,7 +78,7 @@ export default function OpenInterest() {
                 <p>loading...</p>
             </div>
             <div className={`${loading ? " hidden " : "  "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300 dark:bg-custom-gray-a shadow-lg rounded-lg"}>
-                <OpenInterestTable dataAll={dataOiALL} dataEx={dataOiEX}/>
+                <OpenInterestTable dataAll={dataOiALL} />
             </div>
         </div>
     );
