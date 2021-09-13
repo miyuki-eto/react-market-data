@@ -6,10 +6,10 @@ import {MdShowChart} from 'react-icons/md';
 function Header() {
     return (
         <div
-            className="mb-8 flex flex-row w-full px-4 py-4 items-center justify-between shadow bg-white dark:bg-custom-gray-a">
+            className="mb-8 flex flex-row w-full px-8 py-2 items-center justify-between shadow bg-white dark:bg-custom-gray-a">
             <Link to="/">
                 <MdShowChart
-                    className="text-gray-500 dark:text-gray-400 text-2xl cursor-pointer"
+                    className="text-gray-500 dark:text-gray-400 text-4xl cursor-pointer"
                 />
             </Link>
             <div className="flex flex-row space-between gap-4 text-gray-600 dark:text-gray-300">
