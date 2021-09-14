@@ -28,40 +28,40 @@ export default function OpenInterestChart({chartData}) {
     };
     return (
         <div className="flex flex-col justify-items-center">
-            {/*<div className="flex flex-col text-gray-600 dark:text-gray-300 items-center w-auto">*/}
-            {/*    <h1 className="">price</h1>*/}
-            {/*    <ResponsiveContainer*/}
-            {/*        className="m-auto"*/}
-            {/*        width="80%"*/}
-            {/*        height={400}*/}
-            {/*    >*/}
-            {/*        <LineChart*/}
-            {/*            width="80%"*/}
-            {/*            height={400}*/}
-            {/*            data={chartData[0]}*/}
-            {/*            syncId="syncId1"*/}
-            {/*            margin={{top: 10, right: 0, left: 0, bottom: 0}}*/}
-            {/*        >*/}
-            {/*            <CartesianGrid strokeDasharray="1" vertical={false}/>*/}
-            {/*            <XAxis dataKey="date" hide={true}/>*/}
-            {/*            <YAxis dataKey="price" width={150} yAxisId="right" tickFormatter={numberFormatter}*/}
-            {/*                   axisLine={false}*/}
-            {/*                   orientation="right" domain={[dataMin => (dataMin * 0.999), dataMax => (dataMax * 1.001)]}/>*/}
-            {/*            <Tooltip formatter={(value) => new Intl.NumberFormat('en').format(value)}/>*/}
-            {/*            <Line type="monotone" dataKey="price" stroke={colorPrice} yAxisId="right" dot={false}/>*/}
-            {/*        </LineChart>*/}
-            {/*    </ResponsiveContainer>*/}
-            {/*</div>*/}
+            <div className="flex flex-col text-gray-600 dark:text-gray-300 items-center w-auto">
+                <h1 className="">price</h1>
+                <ResponsiveContainer
+                    className="m-auto"
+                    width="100%"
+                    height={300}
+                >
+                    <LineChart
+                        width="100%"
+                        height={300}
+                        data={chartData}
+                        syncId="syncId1"
+                        margin={{top: 10, right: 0, left: 0, bottom: 0}}
+                    >
+                        <CartesianGrid strokeDasharray="2 6" vertical={false}  stroke="gray"/>
+                        <XAxis dataKey="timestamp" hide={true} tickFormatter={dateFormatter} />
+                        <YAxis dataKey="close" width={130} yAxisId="right" tickFormatter={numberFormatter}
+                               axisLine={false}
+                               orientation="right" domain={[dataMin => (dataMin * 0.999), dataMax => (dataMax * 1.001)]}/>
+                        <Tooltip  formatter={numberFormatter}  labelFormatter={tooltipFormatter}/>
+                        <Line type="monotone" dataKey="close" stroke={colorPrice} yAxisId="right" dot={false}/>
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
             <div className="flex flex-col text-gray-600 dark:text-gray-300 items-center">
                 <h1 className="">oi</h1>
                 <ResponsiveContainer
                     className="m-auto"
                     width="100%"
-                    height={420}>
+                    height={300}>
 
                     <LineChart
                         width="100%"
-                        height={420}
+                        height={300}
                         data={chartData}
                         syncId="syncId1"
                         margin={{top: 0, right: 0, left: 0, bottom: 10}}

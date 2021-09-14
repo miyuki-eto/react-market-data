@@ -14,6 +14,7 @@ export default function OpenInterest() {
         return JSON.parse(localStorage.getItem("weights")) || [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     });
     const [binanceOi, setBinanceOi] = useState([]);
+    const [binancePrice, setBinancePrice] = useState([]);
     const [binanceOiCombined, setBinanceOiCombined] = useState([]);
     const [loading, setLoading] = useState(true);
     const [timeframe, setTimeframe] = useState(() => {
@@ -32,7 +33,9 @@ export default function OpenInterest() {
         const fetchData = async () => {
             setLoading(true)
             setBinanceOi([])
+            setBinancePrice([])
             getBinanceOiData(binanceTickers, timeframe)
+            getBinancePriceData(binanceTickers, timeframe)
             // combineData()
             // setLoading(false)
             localStorage.setItem("timeframe", JSON.stringify(timeframe))
@@ -56,15 +59,29 @@ export default function OpenInterest() {
         const timeList = binanceOi.map((tokenData, index) => {
             return tokenData.data.map(item => item['timestamp']);
         });
+        const priceList = binancePrice.map((tokenData, index) => {
+            return tokenData.data.map(item => item[4] * weights[index]);
+        });
+        // console.log(binancePrice)
+        // console.log(priceList)
         const sumData = combList.reduce(function (r, a) {
             a.forEach(function (b, i) {
                 r[i] = (r[i] || 0) + b;
             });
             return r;
         }, []);
+        const sumPrice = priceList.reduce(function (r, a) {
+            a.forEach(function (b, i) {
+                r[i] = (r[i] || 0) + b;
+            });
+            return r;
+        }, []);
+        // console.log(sumPrice)
+
         const data = sumData.map((x, i) => ({
             oi: x,
-            timestamp: timeList[0][i]
+            timestamp: timeList[0][i],
+            close: sumPrice[i]
         }));
         setBinanceOiCombined(data);
         // setLoading(false);
@@ -78,8 +95,23 @@ export default function OpenInterest() {
                             setBinanceOi(oldData => [...oldData, results])
                         }
                     )
-                setLoading(false);
+                // setLoading(false);
                 combineData();
+                }
+            )
+    }
+
+    function getBinancePriceData(tokens, timeframe) {
+        const prefixPrice = "https://fapi.binance.com/fapi/v1/klines?symbol=";
+        Promise.all(tokens.map(u => axios.get(prefixPrice + u + "&interval=" + timeframe + "&limit=500")))
+            .then(responses => {
+                    responses.map((results, index) => {
+                            setBinancePrice(oldData => [...oldData, results])
+                        }
+                    )
+                    setLoading(false);
+                    combineData();
+                    // console.log(binancePrice)
                 }
             )
     }
