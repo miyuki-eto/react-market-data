@@ -7167,6 +7167,11 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
+klinecharts@^8.0.0-alpha4:
+  version "8.0.0-alpha4"
+  resolved "https://registry.yarnpkg.com/klinecharts/-/klinecharts-8.0.0-alpha4.tgz#02bb18b1598e092e09287b07d2c0944ff41373e1"
+  integrity sha512-xWWfqOirc8SjOQEIB4dSV5k+MRqG8jkZSKIp9mx192PJeJUvf/PjlV4I1LZ8U3Pahv3vyDFoYFD+lth9dJtP+w==
+
 klona@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
