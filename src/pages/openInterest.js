@@ -7,7 +7,7 @@ import OpenInterestChart from "../components/openInterestChart";
 
 // const dataForge = require('data-forge');
 
-axiosThrottle.use(axios, {requestsPerSecond: 2});
+axiosThrottle.use(axios, {requestsPerSecond: 9});
 
 export default function OpenInterest() {
     const [weights, setWeights] = useState(() => {
@@ -63,7 +63,7 @@ export default function OpenInterest() {
             return r;
         }, []);
         const data = sumData.map((x, i) => ({
-            oi: x,
+            sumOpenInterestValue: x,
             timestamp: timeList[0][i]
         }));
         setBinanceOiCombined(data);
@@ -113,7 +113,10 @@ export default function OpenInterest() {
                         {/*</div>*/}
                     </div>
                     <div className={`${loading ? " hidden " : "  "}` + " m-auto w-full flex flex-col"}>
-                        <OpenInterestChart chartData={binanceOiCombined}/>
+                        <div className="flex justify-center mb-4">
+                            <h1 className="">weighted open interest</h1>
+                        </div>
+                        <OpenInterestChart chartData={binanceOiCombined} chartHeight={420} chartTitle=""/>
                         <div className="flex flex-row gap-1 justify-center">
                             <button className={`${timeframe === '4h' ? " " : "text-gray-300 dark:text-gray-700 "}` + "w-12 rounded-lg"}
                                     onClick={() => setTimeframe('4h')}>4h
