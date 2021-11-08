@@ -52,8 +52,8 @@ export default function OpenInterestChart({chartData, chartHeight, chartTitle}) 
             {/*        </LineChart>*/}
             {/*    </ResponsiveContainer>*/}
             {/*</div>*/}
-            <div className="flex flex-col text-gray-600 dark:text-gray-300 items-center">
-                <h1 className="">{chartTitle}</h1>
+            <div className="flex flex-row text-gray-600 dark:text-gray-300 items-center">
+                <h1 className="transform -rotate-90 p-0">{chartTitle}</h1>
                 <ResponsiveContainer
                     className="m-auto"
                     width="100%"
