@@ -20,7 +20,7 @@ export default function OpenInterestMultiple() {
         return JSON.parse(localStorage.getItem("exchange")) || "binance";
     });
 
-    const binanceTickers = ["BTCUSDT", "ETHUSDT", "LINKUSDT", "UNIUSDT", "DOTUSDT", "SNXUSDT", "SUSHIUSDT", "BNBUSDT", "AAVEUSDT", "YFIUSDT", "MKRUSDT", "SOLUSDT", "LTCUSDT", "DOGEUSDT"];
+    // const binanceTickers = ["BTCUSDT", "ETHUSDT", "LINKUSDT", "UNIUSDT", "DOTUSDT", "SNXUSDT", "SUSHIUSDT", "BNBUSDT", "AAVEUSDT", "YFIUSDT", "MKRUSDT", "SOLUSDT", "LTCUSDT", "DOGEUSDT"];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,8 +33,8 @@ export default function OpenInterestMultiple() {
             localStorage.setItem("timeframe", JSON.stringify(timeframe))
             localStorage.setItem("exchange", JSON.stringify(exchange))
         }
-        setBinanceTokens([])
-        getBinanceTokens()
+        setBinanceTokens([]);
+        getBinanceTokens();
         fetchData();
 
 

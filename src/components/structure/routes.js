@@ -1,6 +1,7 @@
 import Home from "../../pages/home";
 import OpenInterest from "../../pages/openInterest";
 import OpenInterestMultiple from "../../pages/openInterestMultiple";
+import OpenInterestAgg from "../../pages/openInterestAgg";
 // import Page2 from "../pages/page2";
 
 export const routes = [
@@ -15,9 +16,9 @@ export const routes = [
         main: () => <OpenInterest/>
     },
     {
-        path: '/openinterestmultiple',
+        path: '/openinterestagg',
         exact: true,
-        main: () => <OpenInterestMultiple/>
+        main: () => <OpenInterestAgg/>
     },
     // {
     //     path: '/page2',
