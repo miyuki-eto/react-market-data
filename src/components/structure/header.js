@@ -21,7 +21,12 @@ function Header() {
                     </Link>
                     <Link to="/openinterest">
                         <li className="rounded-lg px-2 py-2">
-                            open interest
+                            weighted oi
+                        </li>
+                    </Link>
+                    <Link to="/openinterestmultiple">
+                        <li className="rounded-lg px-2 py-2">
+                            all oi
                         </li>
                     </Link>
                 </ul>
