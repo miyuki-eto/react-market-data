@@ -46,11 +46,14 @@ export default function OpenInterestAgg() {
         Promise.all(tokens.map(u => axios.get(prefix + u + "&period=" + timeframe + "&limit=500")))
             .then(responses => {
                     responses.map((results, index) => {
-                            setBinanceOi(oldData => [...oldData, results])
+                            setBinanceOi(oldData => [...oldData, results.data])
+                        // console.log(results.data)
                         }
                     )
                     setLoading(false);
-                    combineData();
+                    // combineData();
+                    stackData();
+
                 }
             )
     }
@@ -67,11 +70,34 @@ export default function OpenInterestAgg() {
         // console.log(binanceTokens)
     }
 
+    function stackData() {
+        let arr = binanceOi;
+        let filterObj = (i, obj) => {
+            if (!obj[i.symbol]) {
+                obj[i.symbol] = i.sumOpenInterestValue;
+                obj['timestamp'] = i.timestamp;
+            }
+            let newArr = [];
+            for (let i = 0; i < arr.length; i++) {
+                let obj = {};
+                for (let j = 0; j < arr[i].length; j++) {
+                    filterObj(j, obj);
+                }
+                newArr.push(obj);
+
+            }
+            console.log(newArr);
+            setBinanceOiCombined(newArr);
+        }
+
+    }
+
     function combineData() {
         const combList = binanceOi.map((tokenData, index) => {
             return tokenData.data.map(item => item['sumOpenInterestValue']);
         });
         console.log(binanceOi);
+        console.log(combList);
         const timeList = binanceOi.map((tokenData, index) => {
             return tokenData.data.map(item => item['timestamp']);
         });
@@ -81,13 +107,16 @@ export default function OpenInterestAgg() {
             });
             return r;
         }, []);
-        const data = timeList.map((x, i) => ({
-            timestamp: timeList[0][i]
-        }));
-        console.log(data);
+        // const data = timeList.map((x, i) => (
+        //     combList.map((y, h) => (
+        //         // console.log(y)
+        //     ))
+        //     // timestamp: timeList[0][i]
+        // ));
+        // console.log(data);
 
 
-        setBinanceOiCombined(data);
+        // setBinanceOiCombined(data);
         // setLoading(false);
     }
 
