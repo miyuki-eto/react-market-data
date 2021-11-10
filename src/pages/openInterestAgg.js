@@ -13,6 +13,9 @@ axiosThrottle.use(axios, {requestsPerSecond: 9});
 export default function OpenInterestAgg() {
     const [binanceTokens, setBinanceTokens] = useState([]);
     const [binanceOi, setBinanceOi] = useState([]);
+    const [weights, setWeights] = useState(() => {
+        return JSON.parse(localStorage.getItem("weights")) || [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    });
     const [binanceOiCombined, setBinanceOiCombined] = useState([]);
     const [loading, setLoading] = useState(true);
     const [timeframe, setTimeframe] = useState(() => {
@@ -32,7 +35,7 @@ export default function OpenInterestAgg() {
             setBinanceTokens([]);
             await getBinanceTokens();
             await getBinanceOiData(binanceTokens, timeframe);
-            stackData();
+            // stackData();
             // combineData()
             // setLoading(false)
             localStorage.setItem("timeframe", JSON.stringify(timeframe))
@@ -55,7 +58,7 @@ export default function OpenInterestAgg() {
                         }
                     )
                     setLoading(false);
-                    // combineData();
+                    combineData();
                     // stackData();
 
                 }
@@ -94,12 +97,10 @@ export default function OpenInterestAgg() {
 
     function combineData() {
         const combList = binanceOi.map((tokenData, index) => {
-            return tokenData.data.map(item => item['sumOpenInterestValue']);
+            return tokenData.map(item => item['sumOpenInterestValue'] * weights[index]);
         });
-        console.log(binanceOi);
-        console.log(combList);
         const timeList = binanceOi.map((tokenData, index) => {
-            return tokenData.data.map(item => item['timestamp']);
+            return tokenData.map(item => item['timestamp']);
         });
         const sumData = combList.reduce(function (r, a) {
             a.forEach(function (b, i) {
@@ -107,17 +108,18 @@ export default function OpenInterestAgg() {
             });
             return r;
         }, []);
-        // const data = timeList.map((x, i) => (
-        //     combList.map((y, h) => (
-        //         // console.log(y)
-        //     ))
-        //     // timestamp: timeList[0][i]
-        // ));
-        // console.log(data);
-
-
-        // setBinanceOiCombined(data);
+        const data = sumData.map((x, i) => ({
+            sumOpenInterestValue: x,
+            timestamp: timeList[0][i]
+        }));
+        setBinanceOiCombined(data);
         // setLoading(false);
+    }
+
+    function updateWeights(value, index) {
+        let weightsCopy = [...weights];
+        weightsCopy[index] = parseFloat(value);
+        setWeights(weightsCopy);
     }
 
 
@@ -127,9 +129,23 @@ export default function OpenInterestAgg() {
                 className="flex flex-col content-start items-center gap-2 px-4 py-4 text-gray-600 dark:text-gray-300 bg-white dark:bg-custom-gray-a shadow-lg rounded-lg">
 
                 <div className="flex flex-row w-full gap-4 items-center">
+                    <div
+                        className="grid grid-cols-4 gap-4 text-xs justify-center ml-4 text-center border-r border-gray-300 dark:border-gray-700 mr-2">
+                        {binanceTickers.map((token, index) => (
+                            <div
+                                key={token}
+                                className="flex flex-row items-center text-center">
+                                <button
+                                    className={`${exchange === 'binance' ? " " : "text-gray-300 dark:text-gray-700 "}` + "w-12 rounded-lg mr-2"}
+                                    onClick={(e) => updateWeights(1, index)}>{token}
+                                </button>
+                            </div>
+                        ))}
 
+                    </div>
                     <div className={`${loading ? " hidden " : "  "}` + " m-auto w-full flex flex-col"}>
                         <div className="flex flex-row gap-4 justify-center">
+
                             <div className="flex flex-row gap-1 justify-center mr-10">
                                 <button
                                     className={`${exchange === 'binance' ? " " : "text-gray-300 dark:text-gray-700 "}` + "w-12 rounded-lg"}
@@ -159,10 +175,10 @@ export default function OpenInterestAgg() {
                                 </button>
                             </div>
                         </div>
-                        <StackedAreaChart chartData={binanceOiCombined}
-                                          chartHeight={420}
-                                          chartTitle="oi"
-                                          tokens={binanceTokens}/>
+                        {/*<StackedAreaChart chartData={binanceOiCombined}*/}
+                        {/*                  chartHeight={420}*/}
+                        {/*                  chartTitle="oi"*/}
+                        {/*                  tokens={binanceTokens}/>*/}
                         {/*{binanceOi.map((tokenData, index) => (*/}
                         {/*    <OpenInterestChart chartData={tokenData.data} chartHeight={200}*/}
                         {/*                       chartTitle={binanceTokens[index]} key={index}/>*/}

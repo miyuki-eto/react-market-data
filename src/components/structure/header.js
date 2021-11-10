@@ -24,7 +24,7 @@ function Header() {
                             weighted oi
                         </li>
                     </Link>
-                    <Link to="/openinterestagg">
+                    <Link to="/openinterestall">
                         <li className="rounded-lg px-2 py-2">
                             all oi
                         </li>
