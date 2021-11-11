@@ -2,10 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import axiosThrottle from 'axios-request-throttle';
 
-// import OpenInterestTable from "../components/openInterestTable"
 import OpenInterestChart from "../components/openInterestChart";
-
-// const dataForge = require('data-forge');
 
 axiosThrottle.use(axios, {requestsPerSecond: 9});
 
@@ -66,8 +63,6 @@ export default function OpenInterestAll() {
         setWeightsCoin(arr)
     }
 
-    const binanceTickers = ["BTCUSDT", "ETHUSDT", "LINKUSDT", "UNIUSDT", "DOTUSDT", "SNXUSDT", "SUSHIUSDT", "BNBUSDT", "AAVEUSDT", "YFIUSDT", "MKRUSDT", "SOLUSDT", "LTCUSDT", "DOGEUSDT"];
-
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -76,7 +71,25 @@ export default function OpenInterestAll() {
             setBinanceTokens([])
             setBinanceTokensCoin([])
             setBinanceTokensCoinType([])
-            getBinanceOiData(binanceTokens, binanceTokensCoin, timeframe)
+            const usdTokens = await getBinanceTokens();
+            setBinanceTokens(usdTokens)
+
+            const coinTokens = await getBinanceTokensCoin();
+            setBinanceTokensCoin(coinTokens)
+            initWeights(usdTokens);
+            initWeightsCoin(coinTokens);
+            const usdData = await getBinanceOi(usdTokens);
+            setBinanceOi(usdData)
+            const coinData = await getBinanceOiCoin(coinTokens);
+            setBinanceOiCoin(coinData)
+            setBinanceOi(usdData.concat(coinData))
+            console.log(usdData.concat(coinData))
+            // stackData();
+            // console.log(usdData)
+            const mergedData = await mergeData(usdData.concat(coinData), weights.concat(weightsCoin));
+            setBinanceOiCombined(mergedData)
+            setLoading(false);
+            // getBinanceOiData(binanceTokens, binanceTokensCoin, timeframe)
             // combineData()
             // setLoading(false)
             localStorage.setItem("timeframe", JSON.stringify(timeframe))
@@ -87,89 +100,91 @@ export default function OpenInterestAll() {
     }, [timeframe])
 
     useEffect(() => {
-        setBinanceOiCombined([]);
-        combineData();
-        localStorage.setItem("tokenBool", JSON.stringify(weights));
-        localStorage.setItem("tokenCoinBool", JSON.stringify(weights));
-        // setLoading(false);
+        const updateData = async () => {
+            setBinanceOiCombined([]);
+            const mergedData = await mergeData(binanceOi.concat(binanceOiCoin), weights.concat(weightsCoin));
+            setBinanceOiCombined(mergedData)
+            localStorage.setItem("tokenBool", JSON.stringify(weights));
+            localStorage.setItem("tokenCoinBool", JSON.stringify(weightsCoin));
+            // setLoading(false);
+        }
+        updateData();
     }, [weights, weightsCoin, loading])
 
 
-    function combineData() {
-        const combList = binanceOi.map((tokenData, index) => {
-            return tokenData.data.map(item => item['sumOpenInterestValue'] * weights[index]);
+    async function mergeData(data, weight) {
+        const r = {};
+        console.log(weight)
+        console.log(data.length)
+        await data.forEach((o, i) => {
+            // console.log(weight[i])
+            // console.log(o.data)
+            o.data.forEach(function (x){
+                // console.log(x)
+                r[x.timestamp] = (r[x.timestamp] || 0) + (parseFloat(x.sumOpenInterestValue) * weight[i]);
+            })
+
+        })
+        const result = Object.keys(r).map(function(k){
+            return { timestamp: parseInt(k), sumOpenInterestValue: r[k] }
         });
-        const timeList = binanceOi.map((tokenData, index) => {
-            return tokenData.data.map(item => item['timestamp']);
+        result.sort(function(a, b) {
+            return a.timestamp - b.timestamp;
         });
-        const sumData = combList.reduce(function (r, a) {
-            a.forEach(function (b, i) {
-                r[i] = (r[i] || 0) + b;
-            });
-            return r;
-        }, []);
-        const data = sumData.map((x, i) => ({
-            sumOpenInterestValue: x,
-            timestamp: timeList[0][i]
-        }));
-        setBinanceOiCombined(data);
-        // setLoading(false);
+        // console.log(result);
+        return result
     }
 
-    function getBinanceOiData(tokens, tokensCoin, timeframe) {
-        axios.get("https://fapi.binance.com/fapi/v1/exchangeInfo").then(response => {
-                // console.log(response.data)
+    async function getBinanceTokens() {
+        const data = [];
+        await axios.get("https://fapi.binance.com/fapi/v1/exchangeInfo").then(response => {
                 response.data.symbols.map((tokenData, index) => {
-                    setBinanceTokens(oldData => [...oldData, tokenData.symbol])
+                    // setBinanceTokens(oldData => [...oldData, tokenData.symbol])
+                    data.push(tokenData.symbol)
                 })
             }
         )
-        axios.get("https://dapi.binance.com/dapi/v1/exchangeInfo").then(response => {
-                // console.log(response.data)
+        return data;
+    }
+
+    async function getBinanceTokensCoin() {
+        const data = [];
+        await axios.get("https://dapi.binance.com/dapi/v1/exchangeInfo").then(response => {
                 response.data.symbols.map((tokenData, index) => {
-                    setBinanceTokensCoin(oldData => [...oldData, tokenData.symbol]);
-                    setBinanceTokensCoinType(oldData => [...oldData, tokenData.contractType]);
+                    // setBinanceTokensCoin(oldData => [...oldData, tokenData.symbol])
+                    data.push(tokenData.symbol)
                 })
             }
         )
+        return data;
+    }
+
+    async function getBinanceOi(tokens) {
+        const data = [];
         const prefix = "https://fapi.binance.com/futures/data/openInterestHist?symbol=";
-        Promise.all(tokens.map(u => axios.get(prefix + u + "&period=" + timeframe + "&limit=500")))
+        await Promise.all(tokens.map(u => axios.get(prefix + u + "&period=" + timeframe + "&limit=500")))
             .then(responses => {
-                    responses.map((results, index) => {
-                            setBinanceOi(oldData => [...oldData, results])
+                    responses.map((results) => {
+                            data.push(results)
                         }
                     )
-                    // setLoading(false);
-                initWeights(binanceTokens);
                 }
             )
-        const prefixCoin = "https://dapi.binance.com/futures/data/openInterestHist?pair=";
-        Promise.all(tokensCoin.map((u, i) => axios.get(prefixCoin + u.split("_")[0] + "&period=" + timeframe + "&limit=500&contractType=" + binanceTokensCoinType[i])))
-            .then(responses => {
-                console.log(responses)
-                    responses.map((results, index) => {
-                        console.log(results)
-                            setBinanceOiCoin(oldData => [...oldData, results])
-                        }
-                    )
-                    setLoading(false);
-
-                    initWeightsCoin(binanceTokensCoin);
-                    combineData();
-                }
-
-            )
+        return data;
     }
 
-    function getBinanceTokens() {
-        const url = "https://fapi.binance.com/fapi/v1/exchangeInfo";
-        axios.get(url).then(response => {
-                // console.log(response.data)
-                response.data.symbols.map((tokenData, index) => {
-                    setBinanceTokens(oldData => [...oldData, tokenData.symbol])
-                })
-            }
-        )
+    async function getBinanceOiCoin(tokens) {
+        const data = [];
+        const prefix = "https://dapi.binance.com/futures/data/openInterestHist?pair=";
+        await Promise.all(tokens.map((u, i) => axios.get(prefix + u.split("_")[0] + "&period=" + timeframe + "&limit=500&contractType=" + binanceTokensCoinType[i])))
+            .then(responses => {
+                    responses.map((results) => {
+                            data.push(results)
+                        }
+                    )
+                }
+            )
+        return data;
     }
 
     return (
@@ -178,14 +193,6 @@ export default function OpenInterestAll() {
                 className="flex flex-col content-start items-center gap-2 px-4 py-4 text-gray-600 dark:text-gray-300 bg-white dark:bg-custom-gray-a shadow-lg rounded-lg">
 
                 <div className="flex flex-row w-full gap-4 items-center">
-                    <div>
-
-                        {/*<div className="flex flex-row rounded-lg gap-1 justify-center">*/}
-                        {/*    <button className="w-16 rounded-lg"*/}
-                        {/*            onClick={() => combineData()}>update*/}
-                        {/*    </button>*/}
-                        {/*</div>*/}
-                    </div>
                     <div className={`${loading ? " hidden " : "  "}` + " m-auto w-full flex flex-col"}>
                         <div className="flex justify-center mb-4">
                             <h1 className="">all open interest</h1>
@@ -213,11 +220,6 @@ export default function OpenInterestAll() {
                                     <div
                                         key={token}
                                         className="items-center text-center">
-                                        {/*<p>{token}</p>*/}
-                                        {/*<input type="number"*/}
-                                        {/*       onChange={(e) => updateWeights(index)}*/}
-                                        {/*       defaultValue={weights[index]}*/}
-                                        {/*       className="px-3 py-1 w-20 bg-white dark:bg-custom-gray-a"/>*/}
                                         <button
                                             className={`${weights[index] === 1 ? " " : "text-gray-300 dark:text-gray-700 "}` + "rounded-lg"}
                                             onClick={() => updateWeights(index)}>{token}
@@ -233,39 +235,14 @@ export default function OpenInterestAll() {
                                     <div
                                         key={token}
                                         className="items-center text-center">
-                                        {/*<p>{token}</p>*/}
-                                        {/*<input type="number"*/}
-                                        {/*       onChange={(e) => updateWeights(index)}*/}
-                                        {/*       defaultValue={weights[index]}*/}
-                                        {/*       className="px-3 py-1 w-20 bg-white dark:bg-custom-gray-a"/>*/}
                                         <button
-                                            className={`${weightsCoin[index] === 1 ? " " : "text-gray-300 dark:text-gray-700 "}` + "rounded-lg"}
-                                            onClick={() => updateWeightsCoin(index)}>{token}
+                                            className={`${weights[index + binanceTokens.length] === 1 ? " " : "text-gray-300 dark:text-gray-700 "}` + "rounded-lg"}
+                                            onClick={() => updateWeights(index + binanceTokens.length)}>{token}
                                         </button>
                                     </div>
                                 ))}
 
                             </div>
-                            {/*<h1 className="mt-4">ftx futures</h1>*/}
-                            {/*<div*/}
-                            {/*    className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-12 gap-2 text-xs justify-center px-4 text-center mt-4">*/}
-                            {/*    {binanceTokensCoin.map((token, index) => (*/}
-                            {/*        <div*/}
-                            {/*            key={token}*/}
-                            {/*            className="items-center text-center">*/}
-                            {/*            /!*<p>{token}</p>*!/*/}
-                            {/*            /!*<input type="number"*!/*/}
-                            {/*            /!*       onChange={(e) => updateWeights(index)}*!/*/}
-                            {/*            /!*       defaultValue={weights[index]}*!/*/}
-                            {/*            /!*       className="px-3 py-1 w-20 bg-white dark:bg-custom-gray-a"/>*!/*/}
-                            {/*            <button*/}
-                            {/*                className={`${weightsCoin[index] === 1 ? " " : "text-gray-300 dark:text-gray-700 "}` + "rounded-lg"}*/}
-                            {/*                onClick={() => updateWeightsCoin(index)}>{token}*/}
-                            {/*            </button>*/}
-                            {/*        </div>*/}
-                            {/*    ))}*/}
-
-                            {/*</div>*/}
                         </div>
                     </div>
                     <div
