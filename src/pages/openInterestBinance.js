@@ -6,7 +6,7 @@ import OpenInterestChart from "../components/openInterestChart";
 
 axiosThrottle.use(axios, {requestsPerSecond: 9});
 
-export default function OpenInterestAll() {
+export default function OpenInterestBinance() {
     const [binanceTokens, setBinanceTokens] = useState([]);
     const [binanceTokensCoin, setBinanceTokensCoin] = useState([]);
     // const [binanceTokensCoinType, setBinanceTokensCoinType] = useState([]);

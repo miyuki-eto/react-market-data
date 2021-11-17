@@ -12,7 +12,7 @@ export default function OpenInterestChart({chartData, chartHeight, chartTitle}) 
     });
     const tooltipFormatter = item => new Date(item).toLocaleString('en-US', { ...timeOptions, ...dateOptions });
     const { theme } = React.useContext(ThemeContext);
-    const colorPrice = (theme === 'light') ? '#735d78' : '#94dff3';
+    // const colorPrice = (theme === 'light') ? '#735d78' : '#94dff3';
     const colorOi = (theme === 'light') ? '#b392ac' : '#ffc8dd';
 
     const dateOptions = {

@@ -1,8 +1,6 @@
 import Home from "../../pages/home";
-import OpenInterest from "../../pages/openInterest";
-import OpenInterestMultiple from "../../pages/openInterestMultiple";
-import OpenInterestAgg from "../../pages/openInterestAgg";
-import OpenInterestAll from "../../pages/openInterestAll";
+import OpenInterestWeighted from "../../pages/openInterestWeighted";
+import OpenInterestBinance from "../../pages/openInterestBinance";
 import OpenInterestFtx from "../../pages/openInterestFtx";
 // import Page2 from "../pages/page2";
 
@@ -13,14 +11,14 @@ export const routes = [
         main: () => <Home/>
     },
     {
-        path: '/openinterest',
+        path: '/openinterestweighted',
         exact: true,
-        main: () => <OpenInterest/>
+        main: () => <OpenInterestWeighted/>
     },
     {
-        path: '/openinterestall',
+        path: '/openinterestbinance',
         exact: true,
-        main: () => <OpenInterestAll/>
+        main: () => <OpenInterestBinance/>
     },
     {
         path: '/openinterestftx',

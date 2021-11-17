@@ -9,7 +9,7 @@ import OpenInterestChart from "../components/openInterestChart";
 
 axiosThrottle.use(axios, {requestsPerSecond: 9});
 
-export default function OpenInterest() {
+export default function OpenInterestWeighted() {
     const [weights, setWeights] = useState(() => {
         return JSON.parse(localStorage.getItem("weights")) || [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     });
