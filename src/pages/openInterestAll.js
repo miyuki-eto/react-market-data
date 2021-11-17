@@ -13,9 +13,12 @@ export default function OpenInterestAll() {
     // const [weights, setWeights] = useState(() => {
     //     return JSON.parse(localStorage.getItem("tokenBool")) || [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     // });
+
     const [tokenDict, setTokenDict] = useState(() => {
         return JSON.parse(localStorage.getItem("tokenDict")) || {};
     });
+    // const [tokenDict, setTokenDict] = useState(() => {});
+
     // const [weightsCoin, setWeightsCoin] = useState(() => {
     //     return JSON.parse(localStorage.getItem("tokenCoinBool")) || [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     // });
@@ -39,17 +42,12 @@ export default function OpenInterestAll() {
     // }
 
     function updateDict(token) {
-        // console.log(token)
-        const tokenObj = tokenDict;
-        if (tokenObj[token] === 1) {
-            tokenObj[token] = 0;
+        if (tokenDict[token] === 1) {
+            setTokenDict({...tokenDict, [token]: 0})
         } else {
-            tokenObj[token] = 1;
+            setTokenDict({...tokenDict, [token]: 1})
         }
-        // console.log(tokenObj)
-        setTokenDict(tokenObj);
-        localStorage.setItem("tokenDict", JSON.stringify(tokenObj));
-        // console.log(tokenDict)
+        localStorage.setItem("tokenDict", JSON.stringify(tokenDict));
     }
 
     // function updateWeightsCoin(index) {
@@ -150,13 +148,11 @@ export default function OpenInterestAll() {
         // console.log(weight)
         // console.log(data.length)
         await data.forEach((o, i) => {
-            // console.log(weight[i])
-            // console.log(o.data)
+            const symbolName = ('symbol' in o.data[0]) ? o.data[0].symbol : o.data[0].pair;
+            // console.log(symbolName)
+            // console.log(tokenDict[symbolName])
             o.data.forEach(function (x){
-                // console.log(x)
-                // const symbolName = ('symbol' in x) ? x.symbol : x.pair;
-                // console.log(symbolName)
-                r[x.timestamp] = (r[x.timestamp] || 0) + (parseFloat(x.sumOpenInterestValue) * tokenDict[('symbol' in x) ? x.symbol : x.pair]);
+                r[x.timestamp] = (r[x.timestamp] || 0) + (parseFloat(x.sumOpenInterestValue) * tokenDict[symbolName]);
             })
 
         })

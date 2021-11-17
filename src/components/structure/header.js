@@ -26,7 +26,12 @@ function Header() {
                     </Link>
                     <Link to="/openinterestall">
                         <li className="rounded-lg px-2 py-2">
-                            all oi
+                            binance oi
+                        </li>
+                    </Link>
+                    <Link to="/openinterestftx">
+                        <li className="rounded-lg px-2 py-2">
+                            ftx oi
                         </li>
                     </Link>
                 </ul>
