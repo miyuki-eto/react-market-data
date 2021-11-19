@@ -46,7 +46,7 @@ export default function OpenInterestFtx() {
     }, [weights])
 
     async function getData() {
-        await axios.get("https://c1aedb3907f2.ngrok.io/ftxoi").then(response => {
+        await axios.get("https://871bd6ba9d63.ngrok.io/ftxoi").then(response => {
             setData(response.data.results);
         })
         return [];
