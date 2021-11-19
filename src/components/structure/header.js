@@ -19,14 +19,19 @@ function Header() {
                             home
                         </li>
                     </Link>
-                    <Link to="/openinterest">
+                    <Link to="/openinterestweighted">
                         <li className="rounded-lg px-2 py-2">
                             weighted oi
                         </li>
                     </Link>
-                    <Link to="/openinterestall">
+                    <Link to="/openinterestbinance">
                         <li className="rounded-lg px-2 py-2">
-                            all oi
+                            binance oi
+                        </li>
+                    </Link>
+                    <Link to="/openinterestftx">
+                        <li className="rounded-lg px-2 py-2">
+                            ftx oi
                         </li>
                     </Link>
                 </ul>
