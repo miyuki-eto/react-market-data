@@ -48,38 +48,38 @@ export default function OpenInterestMain() {
             setOiCombined([])
             setOiStacked([])
             const usdTokens = await getBinanceTokens();
-            setBinanceTokens(usdTokens)
+            setBinanceTokens(usdTokens);
             const coinTokens = await getBinanceTokensCoin();
-            setBinanceTokensCoin(coinTokens)
+            setBinanceTokensCoin(coinTokens);
 
             const ftxDataIn = await getFtxData();
-            setFtxOi(ftxDataIn)
+            setFtxOi(ftxDataIn);
             const ftxMarkets = await getFtxMarkets(ftxDataIn)
-            setFtxTokens(ftxMarkets)
+            setFtxTokens(ftxMarkets);
 
-            await updateTokenDict(usdTokens)
-            await updateTokenDict(coinTokens)
-            await updateTokenDict(ftxMarkets)
+            await updateTokenDict(usdTokens);
+            await updateTokenDict(coinTokens);
+            await updateTokenDict(ftxMarkets);
 
             const usdData = await getBinanceOi(usdTokens);
-            setBinanceOi(usdData)
+            setBinanceOi(usdData);
             const coinData = await getBinanceOiCoin(coinTokens);
-            setBinanceOiCoin(coinData)
+            setBinanceOiCoin(coinData);
 
             const mergedBinanceData = await mergeBinanceData(usdData.concat(coinData));
-            setBinanceOiCombined(mergedBinanceData)
+            setBinanceOiCombined(mergedBinanceData);
 
             const mergedFtxData = await mergeFtxData(ftxDataIn);
-            setFtxOiCombined(mergedFtxData)
+            setFtxOiCombined(mergedFtxData);
 
             const stackedData = await stackData(mergedBinanceData, mergedFtxData);
-            setOiStacked(stackedData)
+            setOiStacked(stackedData);
 
             const combinedData = await mergeAllData(stackedData);
-            setOiCombined(combinedData)
+            setOiCombined(combinedData);
 
             setLoading(false);
-            localStorage.setItem("oiView", JSON.stringify(oiView))
+            localStorage.setItem("oiView", JSON.stringify(oiView));
         }
         fetchData();
 
@@ -90,16 +90,16 @@ export default function OpenInterestMain() {
         const updateData = async () => {
             if (!(loading)) {
                 const mergedBinanceData = await mergeBinanceData(binanceOi.concat(binanceOiCoin));
-                setBinanceOiCombined(mergedBinanceData)
+                setBinanceOiCombined(mergedBinanceData);
 
                 const mergedFtxData = await mergeFtxData(ftxOi);
-                setFtxOiCombined(mergedFtxData)
+                setFtxOiCombined(mergedFtxData);
 
                 const mergedAllData = await stackData(mergedBinanceData, mergedFtxData);
-                setOiStacked(mergedAllData)
+                setOiStacked(mergedAllData);
 
                 const combinedData = await mergeAllData(mergedAllData);
-                setOiCombined(combinedData)
+                setOiCombined(combinedData);
             }
         }
         updateData();
