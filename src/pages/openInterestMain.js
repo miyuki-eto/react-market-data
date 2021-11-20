@@ -131,6 +131,8 @@ export default function OpenInterestMain() {
         const r = {};
         await data.forEach((o, i) => {
             const symbolName = ('symbol' in o.data[0]) ? o.data[0].symbol : o.data[0].pair;
+            console.log(tokenDict[symbolName])
+            console.log(symbolName)
             o.data.forEach(function (x) {
                 r[x.timestamp] = (r[x.timestamp] || 0) + (parseFloat(x.sumOpenInterestValue) * tokenDict[symbolName]);
             })
