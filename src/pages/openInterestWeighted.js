@@ -3,7 +3,7 @@ import axios from "axios";
 import axiosThrottle from 'axios-request-throttle';
 
 // import OpenInterestTable from "../components/openInterestTable"
-import OpenInterestChart from "../components/openInterestChart";
+import BasicChart from "../components/charts/basicChart";
 
 // const dataForge = require('data-forge');
 
@@ -116,7 +116,7 @@ export default function OpenInterestWeighted() {
                         <div className="flex justify-center mb-4">
                             <h1 className="">weighted open interest</h1>
                         </div>
-                        <OpenInterestChart chartData={binanceOiCombined} chartHeight={420} chartTitle=""/>
+                        <BasicChart chartData={binanceOiCombined} chartHeight={420} chartTitle=""/>
                         <div className="flex flex-row gap-1 justify-center">
                             <button className={`${timeframe === '4h' ? " " : "text-gray-300 dark:text-gray-700 "}` + "w-12 rounded-lg"}
                                     onClick={() => setTimeframe('4h')}>4h

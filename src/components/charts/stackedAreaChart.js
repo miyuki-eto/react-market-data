@@ -1,10 +1,10 @@
 import React from "react";
-// import {LineChart, XAxis, Tooltip, Line, YAxis, ResponsiveContainer, CartesianGrid} from "recharts";
+// import {BasicChart, XAxis, Tooltip, Line, YAxis, ResponsiveContainer, CartesianGrid} from "recharts";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-import {ThemeContext} from "./structure/themeContext";
+import {ThemeContext} from "../structure/themeContext";
 
-export default function StackedAreaChart({chartData, chartHeight, chartTitle, tokens}) {
+export default function StackedAreaChart({chartData, chartHeight, chartTitle, tokens, colors}) {
     const numberFormatter = item => new Intl.NumberFormat('en', {style: 'currency',
         currency: 'USD'}).format(item);
     const dateFormatter = item => new Date(item).toLocaleDateString("en-US", {
@@ -37,7 +37,7 @@ export default function StackedAreaChart({chartData, chartHeight, chartTitle, to
             {/*        width="80%"*/}
             {/*        height={400}*/}
             {/*    >*/}
-            {/*        <LineChart*/}
+            {/*        <BasicChart*/}
             {/*            width="80%"*/}
             {/*            height={400}*/}
             {/*            data={chartData[0]}*/}
@@ -51,7 +51,7 @@ export default function StackedAreaChart({chartData, chartHeight, chartTitle, to
             {/*                   orientation="right" domain={[dataMin => (dataMin * 0.999), dataMax => (dataMax * 1.001)]}/>*/}
             {/*            <Tooltip formatter={(value) => new Intl.NumberFormat('en').format(value)}/>*/}
             {/*            <Line type="monotone" dataKey="price" stroke={colorPrice} yAxisId="right" dot={false}/>*/}
-            {/*        </LineChart>*/}
+            {/*        </BasicChart>*/}
             {/*    </ResponsiveContainer>*/}
             {/*</div>*/}
             <div className="flex flex-row text-gray-600 dark:text-gray-300 items-center">
@@ -74,7 +74,7 @@ export default function StackedAreaChart({chartData, chartHeight, chartTitle, to
                                allowDecimals={false} orientation="right" axisLine={false} interval="preserveEnd"
                                domain={[dataMin => (dataMin * 0.999), dataMax => (dataMax * 1.001)]}/>
                         {tokens.map((tokenName, index) => (
-                            <Area type="monotone" dataKey={tokenName} stroke={colorOi} fill={colorOi} stackId="1"/>
+                            <Area type="monotone" dataKey={tokenName} stroke={colors[index]} fill={colors[index]} stackId="1" key={index}/>
                             ))}
                     </AreaChart>
                 </ResponsiveContainer>

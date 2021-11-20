@@ -1,8 +1,5 @@
 import Home from "../../pages/home";
-import OpenInterestWeighted from "../../pages/openInterestWeighted";
-import OpenInterestBinance from "../../pages/openInterestBinance";
-import OpenInterestFtx from "../../pages/openInterestFtx";
-// import Page2 from "../pages/page2";
+import OpenInterestMain from "../../pages/openInterestMain";
 
 export const routes = [
     {
@@ -11,23 +8,8 @@ export const routes = [
         main: () => <Home/>
     },
     {
-        path: '/openinterestweighted',
+        path: '/openinterest',
         exact: true,
-        main: () => <OpenInterestWeighted/>
+        main: () => <OpenInterestMain/>
     },
-    {
-        path: '/openinterestbinance',
-        exact: true,
-        main: () => <OpenInterestBinance/>
-    },
-    {
-        path: '/openinterestftx',
-        exact: true,
-        main: () => <OpenInterestFtx/>
-    },
-    // {
-    //     path: '/page2',
-    //     exact: true,
-    //     main: () => <Page2/>
-    // }
 ]
