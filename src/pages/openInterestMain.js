@@ -130,11 +130,12 @@ export default function OpenInterestMain() {
     async function mergeBinanceData(data) {
         const r = {};
         await data.forEach((o, i) => {
-            const symbolName = ('symbol' in o.data[0]) ? o.data[0].symbol : o.data[0].pair;
-            console.log(tokenDict[symbolName])
-            console.log(symbolName)
-            o.data.forEach(function (x) {
-                r[x.timestamp] = (r[x.timestamp] || 0) + (parseFloat(x.sumOpenInterestValue) * tokenDict[symbolName]);
+            // const symbolName = ('symbol' in o.data[0]) ? o.data[0].symbol : o.data[0].symbol;
+            // console.log(tokenDict[symbolName])
+            // console.log(symbolName)
+            // console.log(o.data[0])
+            o.forEach(function (x) {
+                r[x.timestamp] = (r[x.timestamp] || 0) + (parseFloat(x.sumOpenInterestValue) * tokenDict[x.symbol]);
             })
 
         })
@@ -218,6 +219,7 @@ export default function OpenInterestMain() {
                 response.data.symbols.map((tokenData, index) => {
                     // setBinanceTokensCoin(oldData => [...oldData, tokenData.symbol])
                     data.push(tokenData.symbol)
+                    // console.log(tokenData)
                 })
             }
         )
@@ -230,7 +232,7 @@ export default function OpenInterestMain() {
         await Promise.all(tokens.map(u => axios.get(prefix + u + "&period=15m&limit=500")))
             .then(responses => {
                     responses.map((results) => {
-                            data.push(results)
+                            data.push(results.data)
                         }
                     )
                 }
@@ -242,9 +244,23 @@ export default function OpenInterestMain() {
         const data = [];
         const prefix = "https://dapi.binance.com/futures/data/openInterestHist?pair=";
         await Promise.all(tokens.map((u, i) => axios.get(prefix + u.split("_")[0] + "&period=15m&limit=500&contractType=ALL")))
-            .then(responses => {
-                    responses.map((results) => {
-                            data.push(results)
+            .then((responses, index) => {
+                    // console.log(responses)
+                    // console.log(tokens)
+                    // console.log(index)
+                    // console.log(tokens[index])
+                    responses.map((results, i) => {
+                            // data.push(results)
+                            // console.log(i)
+                            // console.log(tokens[i])
+                            // console.log(results)
+                            const tokenData = [];
+                            results.data.map((token) => {
+                                // console.log(token)
+                                tokenData.push({...token, symbol: tokens[i]})
+                            })
+                            // console.log(tokenData);
+                            data.push(tokenData)
                         }
                     )
                 }
@@ -301,7 +317,8 @@ export default function OpenInterestMain() {
                         <div className={`${oiView === 'ftx' ? " " : " hidden "}` + " m-auto w-full flex flex-col"}>
                             <FtxOiView chartData={ftxOiCombined} tokenDict={tokenDict}/>
                         </div>
-                        <div className={`${(oiView === 'binance') || (oiView === 'combined') ? " " : " hidden "}` +" mb-4 "}>
+                        <div
+                            className={`${(oiView === 'binance') || (oiView === 'combined') ? " " : " hidden "}` + " mb-4 "}>
                             <h1>binance usd margined markets</h1>
                             <div
                                 className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-12 gap-2 text-xs justify-center px-4 text-center mt-4">
@@ -317,7 +334,8 @@ export default function OpenInterestMain() {
                                 ))}
                             </div>
                         </div>
-                        <div className={`${(oiView === 'binance') || (oiView === 'combined') ? " " : " hidden "}` +" mb-4 "}>
+                        <div
+                            className={`${(oiView === 'binance') || (oiView === 'combined') ? " " : " hidden "}` + " mb-4 "}>
                             <h1>binance coin margined markets</h1>
                             <div
                                 className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-12 gap-2 text-xs justify-center px-4 text-center mt-4">
@@ -333,7 +351,8 @@ export default function OpenInterestMain() {
                                 ))}
                             </div>
                         </div>
-                        <div className={`${(oiView === 'ftx') || (oiView === 'combined') ? " " : " hidden "}` +" mb-4"}>
+                        <div
+                            className={`${(oiView === 'ftx') || (oiView === 'combined') ? " " : " hidden "}` + " mb-4"}>
                             <h1>ftx markets</h1>
                             <div
                                 className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-12 gap-2 text-xs justify-center px-4 text-center mt-4">
