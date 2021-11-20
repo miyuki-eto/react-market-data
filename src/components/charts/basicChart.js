@@ -1,8 +1,8 @@
 import React from "react";
 import {LineChart, XAxis, Tooltip, Line, YAxis, ResponsiveContainer, CartesianGrid} from "recharts";
-import {ThemeContext} from "./structure/themeContext";
+import {ThemeContext} from "../structure/themeContext";
 
-export default function OpenInterestChart({chartData, chartHeight, chartTitle}) {
+export default function BasicChart({chartData, chartHeight, chartTitle, dataLabel}) {
     const numberFormatter = item => new Intl.NumberFormat('en', {style: 'currency',
         currency: 'USD'}).format(item);
     const dateFormatter = item => new Date(item).toLocaleDateString("en-US", {
@@ -35,7 +35,7 @@ export default function OpenInterestChart({chartData, chartHeight, chartTitle}) 
             {/*        width="80%"*/}
             {/*        height={400}*/}
             {/*    >*/}
-            {/*        <LineChart*/}
+            {/*        <BasicChart*/}
             {/*            width="80%"*/}
             {/*            height={400}*/}
             {/*            data={chartData[0]}*/}
@@ -49,7 +49,7 @@ export default function OpenInterestChart({chartData, chartHeight, chartTitle}) 
             {/*                   orientation="right" domain={[dataMin => (dataMin * 0.999), dataMax => (dataMax * 1.001)]}/>*/}
             {/*            <Tooltip formatter={(value) => new Intl.NumberFormat('en').format(value)}/>*/}
             {/*            <Line type="monotone" dataKey="price" stroke={colorPrice} yAxisId="right" dot={false}/>*/}
-            {/*        </LineChart>*/}
+            {/*        </BasicChart>*/}
             {/*    </ResponsiveContainer>*/}
             {/*</div>*/}
             <div className="flex flex-row text-gray-600 dark:text-gray-300 items-center">
@@ -67,11 +67,11 @@ export default function OpenInterestChart({chartData, chartHeight, chartTitle}) 
                     >
                         <CartesianGrid strokeDasharray="2 6" vertical={false}   stroke="gray"/>
                         <XAxis dataKey="timestamp" tickFormatter={dateFormatter} axisLine={false} />
-                        <YAxis dataKey="sumOpenInterestValue" width={130} yAxisId="right" tickFormatter={numberFormatter}
+                        <YAxis dataKey={dataLabel} width={130} yAxisId="right" tickFormatter={numberFormatter}
                                allowDecimals={false} orientation="right" axisLine={false} interval="preserveEnd"
                                domain={[dataMin => (dataMin * 0.999), dataMax => (dataMax * 1.001)]}/>
                         <Tooltip formatter={numberFormatter}  labelFormatter={tooltipFormatter}/>
-                        <Line type="monotone" dataKey="sumOpenInterestValue" stroke={colorOi} yAxisId="right" dot={false}/>
+                        <Line type="monotone" dataKey={dataLabel} stroke={colorOi} yAxisId="right" dot={false}/>
                     </LineChart>
                 </ResponsiveContainer>
             </div>
