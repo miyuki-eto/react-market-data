@@ -266,7 +266,7 @@ export default function OpenInterestMain() {
         // const contractType = binanceOiCoinType[]
         await Promise.all(tokens.map((u, i) => axios.get(prefix + u.split("_")[0] + "&period=15m&limit=500&contractType=" + binanceOiCoinType[u])))
             .then((responses, index) => {
-                    console.log(responses)
+                    // console.log(responses)
                     // console.log(tokens)
                     // console.log(index)
                     // console.log(tokens[index])
