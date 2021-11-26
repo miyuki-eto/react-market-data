@@ -10,7 +10,8 @@ module.exports = {
         emerald: colors.emerald,
         'custom-gray-a': '#161b22',
         'custom-gray-b': '#0d1117',
-        'custom-pink-a': '#fcefed'
+        'custom-pink-a': '#fcefed',
+        'custom-accent-a': '#b392ac'
       },
     },
   },
