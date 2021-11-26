@@ -263,7 +263,8 @@ export default function OpenInterestMain() {
     async function getBinanceOiCoin(tokens) {
         const data = [];
         const prefix = "https://dapi.binance.com/futures/data/openInterestHist?pair=";
-        // const contractType = binanceOiCoinType[]
+        // const contractType = binanceOiCoinType[tokens[0]]
+        // console.log(contractType)
         await Promise.all(tokens.map((u, i) => axios.get(prefix + u.split("_")[0] + "&period=15m&limit=500&contractType=" + binanceOiCoinType[u])))
             .then((responses, index) => {
                     // console.log(responses)
