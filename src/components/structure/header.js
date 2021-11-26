@@ -24,6 +24,11 @@ function Header() {
                             open interest
                         </li>
                     </Link>
+                    <Link to="/basis">
+                        <li className="rounded-lg px-2 py-2">
+                            basis
+                        </li>
+                    </Link>
                 </ul>
             </div>
             <div className="">
