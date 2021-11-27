@@ -54,7 +54,6 @@ export default function OpenInterestMain() {
             setBinanceTokensCoin(coinTokens);
 
             const coinType = await getBinanceTokensCoinType();
-            console.log(coinType)
             setBinanceOiCoinType(coinType);
 
             const ftxDataIn = await getFtxData();
@@ -68,7 +67,8 @@ export default function OpenInterestMain() {
 
             const usdData = await getBinanceOi(usdTokens);
             setBinanceOi(usdData);
-            const coinData = await getBinanceOiCoin(coinTokens);
+            // console.log(coinType)
+            const coinData = await getBinanceOiCoin(coinTokens, coinType);
             setBinanceOiCoin(coinData);
 
             const mergedBinanceData = await mergeBinanceData(usdData.concat(coinData));
@@ -260,12 +260,12 @@ export default function OpenInterestMain() {
         return data;
     }
 
-    async function getBinanceOiCoin(tokens) {
+    async function getBinanceOiCoin(tokens, contract) {
         const data = [];
         const prefix = "https://dapi.binance.com/futures/data/openInterestHist?pair=";
         // const contractType = binanceOiCoinType[tokens[0]]
         // console.log(contractType)
-        await Promise.all(tokens.map((u, i) => axios.get(prefix + u.split("_")[0] + "&period=15m&limit=500&contractType=" + binanceOiCoinType[u])))
+        await Promise.all(tokens.map((u, i) => axios.get(prefix + u.split("_")[0] + "&period=15m&limit=500&contractType=" + contract[u])))
             .then((responses, index) => {
                     // console.log(responses)
                     // console.log(tokens)
