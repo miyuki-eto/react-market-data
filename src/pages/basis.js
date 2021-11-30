@@ -39,7 +39,7 @@ export default function Basis({chartData, tokenDict}) {
         }
         updateData();
 
-    }, 60000);
+    }, 5000);
 
 
     async function getBasisData() {
