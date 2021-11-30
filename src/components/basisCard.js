@@ -16,8 +16,8 @@ export default function BasisCard({title, price, perc}) {
                 className="flex flex-col content-start items-center gap-2 px-4 py-4 text-gray-600 dark:text-gray-300 bg-white dark:bg-custom-gray-a shadow-lg rounded-lg">
                 <p className="text-lg">{title}</p>
                 <p>{currencyFormat.format(price)}</p>
-                <p className={`${perc > 0 ? " text-blue-500 " : " text-custom-accent-a "}` + " "}>
-                    {parseFloat(perc).toFixed(2)+"%"}
+                <p className={`${perc > 0 ? " text-custom-accent-b " : " text-custom-accent-a "}` + " "}>
+                    {parseFloat(perc).toFixed(3)+"%"}
                 </p>
             </div>
         </div>

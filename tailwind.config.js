@@ -11,7 +11,8 @@ module.exports = {
         'custom-gray-a': '#161b22',
         'custom-gray-b': '#0d1117',
         'custom-pink-a': '#fcefed',
-        'custom-accent-a': '#b392ac'
+        'custom-accent-a': '#b392ac',
+        'custom-accent-b': '#00acc2'
       },
     },
   },
