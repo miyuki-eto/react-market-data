@@ -5,22 +5,27 @@ import {ThemeContext} from "../components/structure/themeContext";
 import axios from "axios";
 
 export default function Basis({chartData, tokenDict}) {
-    const { theme } = React.useContext(ThemeContext);
-    const [basis, setBasis] = useState(() => {
-        return JSON.parse(localStorage.getItem("basisData")) || {};
-    });
-    // const [basis, setBasis] = useState();
+    const {theme} = React.useContext(ThemeContext);
+    const [basis, setBasis] = useState(
+        [{
+            'coinbase': 0,
+            'binance_price': 0,
+            'binance_basis': 0,
+            'ftx_price': 0,
+            'ftx_basis': 0,
+            'bitmex_price': 0,
+            'bitmex_basis': 0,
+            'bybit_price': 0,
+            'bybit_basis': 0
+        }]
+    );
     const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
         const fetchData = async () => {
-            // setBasisData({})
-
             const basisData = await getBasisData();
             setBasis(basisData);
-            localStorage.setItem("basisData", JSON.stringify(basisData));
-            // console.log(basisData)
             setLoading(false);
         }
         fetchData();
@@ -29,11 +34,8 @@ export default function Basis({chartData, tokenDict}) {
 
     useInterval(() => {
         const updateData = async () => {
-            // setBasisData({})
             const basisData = await getBasisData();
             setBasis(basisData);
-            localStorage.setItem("basisData", JSON.stringify(basisData));
-            // console.log(basisData)
         }
         updateData();
 
@@ -61,6 +63,7 @@ export default function Basis({chartData, tokenDict}) {
             function tick() {
                 savedCallback.current();
             }
+
             if (delay !== null) {
                 let id = setInterval(tick, delay);
                 return () => clearInterval(id);
@@ -72,12 +75,13 @@ export default function Basis({chartData, tokenDict}) {
         <div className="px-8 mx-auto">
             <div
                 className="flex flex-col content-center items-center gap-2 px-4 py-4 text-gray-600 dark:text-gray-300 ">
-                <div className={`${loading ? " hidden " : "  "}` + " flex flex-row w-full gap-4 items-center justify-center"}>
-                    <BasisCard title="coinbase" price={basis[0].coinbase}    perc={0}/>
-                    <BasisCard title="ftx"      price={basis[0].ftx_price}         perc={basis[0].ftx_basis}/>
-                    <BasisCard title="binance"  price={basis[0].binance_price}     perc={basis[0].binance_basis}/>
-                    <BasisCard title="bitmex"   price={basis[0].bitmex_price}      perc={basis[0].bitmex_basis}/>
-                    <BasisCard title="bybit"    price={basis[0].bybit_price}       perc={basis[0].bybit_basis}/>
+                <div
+                    className={`${loading ? " hidden " : "  "}` + " flex flex-row w-full gap-4 items-center justify-center"}>
+                    <BasisCard title="coinbase" price={basis[0].coinbase} perc={0}/>
+                    <BasisCard title="ftx" price={basis[0].ftx_price} perc={basis[0].ftx_basis}/>
+                    <BasisCard title="binance" price={basis[0].binance_price} perc={basis[0].binance_basis}/>
+                    <BasisCard title="bitmex" price={basis[0].bitmex_price} perc={basis[0].bitmex_basis}/>
+                    <BasisCard title="bybit" price={basis[0].bybit_price} perc={basis[0].bybit_basis}/>
                 </div>
                 <div
                     className={`${loading ? " " : " hidden "}` + "flex flex-col content-start items-center px-4 text-gray-600 dark:text-gray-300 mx-auto my-auto"}>
