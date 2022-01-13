@@ -2,6 +2,7 @@ import Home from "../../pages/home";
 import OpenInterestMain from "../../pages/openInterestMain";
 import Basis from "../../pages/basis";
 import Moon from "../../pages/moon";
+import Trabucco from "../../pages/trabucco"
 
 export const routes = [
     {
@@ -24,4 +25,9 @@ export const routes = [
         exact: true,
         main: () => <Moon/>
     },
+    {
+        path: '/trabucco',
+        exact: true,
+        main: () => <Trabucco/>
+    }
 ]
