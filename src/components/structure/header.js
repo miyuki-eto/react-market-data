@@ -34,6 +34,11 @@ function Header() {
                             moon
                         </li>
                     </Link>
+                    <Link to="/trabucco">
+                        <li className="rounded-lg px-2 py-2">
+                            trabucco
+                        </li>
+                    </Link>
                 </ul>
             </div>
             <div className="">

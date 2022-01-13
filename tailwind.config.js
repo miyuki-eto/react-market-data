@@ -12,7 +12,9 @@ module.exports = {
         'custom-gray-b': '#0d1117',
         'custom-pink-a': '#fcefed',
         'custom-accent-a': '#b392ac',
-        'custom-accent-b': '#00acc2'
+        'custom-accent-b': '#00acc2',
+        'custom-gray-c': '#12161D'
+
       },
     },
   },
